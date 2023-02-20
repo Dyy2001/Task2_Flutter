@@ -19,9 +19,20 @@ class _RegistrasiPageState extends State<RegistrasiPage> {
   ];
   String _selectItem = 'Islam';
 
-  final TextEditingController _nama = TextEditingController();
+  GlobalKey<FormState> _key = GlobalKey();
+  final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _motto = TextEditingController();
+
+  void validasiText() {
+    if (_key.currentState!.validate()) {
+      if (_email.text.isEmpty &&
+          _password.text.isEmpty &&
+          _motto.text.isEmpty) {
+        print("Data tidak boleh kosong");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +43,7 @@ class _RegistrasiPageState extends State<RegistrasiPage> {
         ),
         body: SingleChildScrollView(
           child: Form(
+            key: _key,
             child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(25),
@@ -39,23 +51,35 @@ class _RegistrasiPageState extends State<RegistrasiPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
+                      controller: _email,
                       decoration: InputDecoration(
                         labelText: "Email",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
+                      validator: (e) {
+                        if (e!.isEmpty) {
+                          return "Email Tidak Boleh Kosong!";
+                        }
+                      },
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
+                      controller: _password,
                       decoration: InputDecoration(
                         labelText: "Password",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
+                      validator: (e) {
+                        if (e!.isEmpty) {
+                          return "Password Tidak Boleh Kosong!";
+                        }
+                      },
                     ),
                     const SizedBox(
                       height: 10,
@@ -68,6 +92,11 @@ class _RegistrasiPageState extends State<RegistrasiPage> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           )),
+                      validator: (e) {
+                        if (e!.isEmpty) {
+                          return "Tidak Boleh Kosong!";
+                        }
+                      },
                     ),
                     const SizedBox(
                       height: 10,
@@ -132,6 +161,7 @@ class _RegistrasiPageState extends State<RegistrasiPage> {
                               MaterialStateProperty.all(Colors.lightGreen)),
                       //TextStyle: Te
                       onPressed: () {
+                        validasiText();
                         showDialog(
                             context: context,
                             builder: (context) {
@@ -148,7 +178,7 @@ class _RegistrasiPageState extends State<RegistrasiPage> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text("Nama : ${_nama.text}"),
+                                      Text("email : ${_email.text}"),
                                       Text("Password : ${_password.text}"),
                                       Text("Motto : ${_motto.text}"),
                                       Text("Jenis Kelamin : ${gender}"),
